@@ -23,7 +23,7 @@ public class TransactionController {
 		return transactionService.borrowArticles(id, articleTitles);
 	}
 
-	@PostMapping("returnArticle/{userId}/{articleTitle}")
+	@PostMapping("returnArticle/{userId}")
 	public ResponseEntity<String> returnArticle(@PathVariable(name = "userId", required = true) int id,
 			@RequestBody(required = true) List<String> articleTitles) {
 		return transactionService.returnArticles(id, articleTitles);
