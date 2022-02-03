@@ -55,7 +55,9 @@ public class TransactionServiceImpl implements TransactionService {
 						HttpStatus.BAD_REQUEST);
 			}
 			transactions.forEach(transaction -> {
-				articlesOnHand.add(transaction.getArticle());
+				if (transaction.getReturnedOn() == null) {
+					articlesOnHand.add(transaction.getArticle());
+				}
 			});
 
 		}
