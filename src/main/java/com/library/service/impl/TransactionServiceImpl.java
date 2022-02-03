@@ -47,7 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
 		List<Article> articlesOnHand = new ArrayList<Article>();
 		List<UserArticleTransaction> transactions = transactionRepo.findByUser(user.get());
 		if (!transactions.isEmpty()) {
-			long onHandCount = transactions.stream().filter(item -> item.getReturnedOn() != null).count();
+			long onHandCount = transactions.stream().filter(item -> item.getReturnedOn() == null).count();
 			if (onHandCount == 7 || (onHandCount + articleTitles.size()) > 7) {
 				return new ResponseEntity<String>(
 						"Your borrowal limit will exceed with this request. "
