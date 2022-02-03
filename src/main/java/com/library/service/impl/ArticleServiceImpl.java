@@ -18,17 +18,26 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	ArticleRepository articleRepo;
 
+	/**
+	 * To get all articles
+	 */
 	@Override
 	public List<Article> getArticles() {
 		return articleRepo.findAll();
 	}
 
+	/**
+	 * To add a new article
+	 */
 	@Override
 	@Transactional
 	public void addArticle(Article article) {
 		articleRepo.save(article);
 	}
 
+	/**
+	 * To delete an existing article
+	 */
 	@Override
 	public boolean deleteArticle(int id) {
 		Optional<Article> article = articleRepo.findById(id);

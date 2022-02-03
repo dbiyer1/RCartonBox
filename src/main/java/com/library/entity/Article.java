@@ -13,12 +13,18 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Entity
 public class Article {
 
+	/**
+	 * Sequence Generator added to have auto-incremented id set for every new article
+	 */
 	@Id
 	@SequenceGenerator(name = "articleSeq", sequenceName = "articleSeq", initialValue = 100)
 	@GeneratedValue(generator = "articleSeq")
 	@Hidden
 	private Integer id;
 
+	/**
+	 * Constraint added to ensure TITLE of every article is unique
+	 */
 	@Column(unique = true)
 	private String title;
 

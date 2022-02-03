@@ -18,17 +18,26 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepo;
 
+	/**
+	 * To get all users
+	 */
 	@Override
 	public List<User> getUsers() {
 		return userRepo.findAll();
 	}
 
+	/**
+	 * To add a new user
+	 */
 	@Override
 	@Transactional
 	public void addUser(User user) {
 		userRepo.save(user);
 	}
 
+	/**
+	 * To delete an existing user
+	 */
 	@Override
 	public boolean deleteUser(int id) {
 		Optional<User> user = userRepo.findById(id);

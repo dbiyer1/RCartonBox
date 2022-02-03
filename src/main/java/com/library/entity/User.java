@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Entity
 public class User {
 
+	/**
+	 * Sequence Generator added to have auto-incremented id set for every new user
+	 */
 	@Id
 	@SequenceGenerator(name = "userSeq", sequenceName = "userSeq", initialValue = 100)
 	@GeneratedValue(generator = "userSeq")

@@ -33,17 +33,26 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	ArticleRepository articleRepo;
 
+	/**
+	 * Records transactions when article is being borrowed
+	 */
 	@Override
 	@Transactional
 	public ResponseEntity<String> borrowArticles(int userId, List<String> articleTitles) {
+
+		// Validate if the user is borrowing more than 5 articles at the same time
 		if (articleTitles.size() > 5) {
 			return new ResponseEntity<String>("Your borrowal limit at a time cannot be more than 5 ",
 					HttpStatus.BAD_REQUEST);
 		}
+
+		// Validate if the given User ID is valid
 		Optional<User> user = userRepo.findById(userId);
 		if (user.isEmpty()) {
 			return new ResponseEntity<String>("User ID does not exists", HttpStatus.BAD_REQUEST);
 		}
+
+		// Validate if the user is not exceeding to hold more than 7 articles
 		List<Article> articlesOnHand = new ArrayList<Article>();
 		List<UserArticleTransaction> transactions = transactionRepo.findByUser(user.get());
 		if (!transactions.isEmpty()) {
@@ -61,6 +70,7 @@ public class TransactionServiceImpl implements TransactionService {
 			});
 
 		}
+		// Validate if the given Article ID is valid
 		List<Article> requestedArticles = new ArrayList<Article>();
 		for (String title : articleTitles) {
 			Optional<Article> article = articleRepo.findByTitle(title);
@@ -70,6 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 			requestedArticles.add(article.get());
 		}
 
+		// Validate if the user ID is trying to borrow more than 2 articles of type NEW
 		long cnt1 = requestedArticles.stream().filter(article -> article.getType().equals(ArticleType.NEW.toString()))
 				.count();
 		long cnt2 = articlesOnHand.stream().filter(article -> article.getType().equals(ArticleType.NEW.toString()))
@@ -81,6 +92,7 @@ public class TransactionServiceImpl implements TransactionService {
 					HttpStatus.BAD_REQUEST);
 		}
 
+		// Save if all the validations are passed
 		requestedArticles.forEach(article -> {
 			UserArticleTransaction item = new UserArticleTransaction();
 			item.setArticle(article);
@@ -92,13 +104,21 @@ public class TransactionServiceImpl implements TransactionService {
 		return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 	}
 
+	/**
+	 * Records transactions when article is being returned
+	 *
+	 */
 	@Override
 	@Transactional
 	public ResponseEntity<String> returnArticles(int userId, List<String> articleTitles) {
+
+		// Validate if the given User ID is valid
 		Optional<User> user = userRepo.findById(userId);
 		if (user.isEmpty()) {
 			return new ResponseEntity<String>("User ID does not exists", HttpStatus.BAD_REQUEST);
 		}
+
+		// Validate if the given Article ID is valid
 		List<Article> requestedArticles = new ArrayList<Article>();
 		for (String title : articleTitles) {
 			Optional<Article> article = articleRepo.findByTitle(title);
@@ -107,6 +127,8 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 			requestedArticles.add(article.get());
 		}
+
+		// Save if all the validations are passed
 		requestedArticles.forEach(article -> {
 			UserArticleTransaction item = transactionRepo.getItem(user.get(), article);
 			if (item != null) {

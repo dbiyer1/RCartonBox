@@ -16,15 +16,27 @@ import io.swagger.v3.oas.annotations.Hidden;
 @Entity
 public class UserArticleTransaction {
 
+	/**
+	 * Sequence Generator added to have auto-incremented id set for every new
+	 * transaction
+	 */
 	@Id
 	@SequenceGenerator(name = "transactionSeq", sequenceName = "transactionSeq", initialValue = 100)
 	@GeneratedValue(generator = "transactionSeq")
 	@Hidden
 	private Integer id;
 
+	/**
+	 * Established relationship with user since the same user can be involved in
+	 * multiple transactions
+	 */
 	@ManyToOne
 	private User user;
 
+	/**
+	 * Established relationship with article since the same article can be involved
+	 * in multiple transactions
+	 */
 	@ManyToOne
 	private Article article;
 
