@@ -27,6 +27,18 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	/**
+	 * Get article for given ID
+	 */
+	@Override
+	public Article getArticle(int id) {
+		Optional<Article> articleOptional = articleRepo.findById(id);
+		if (articleOptional.isPresent()) {
+			return articleOptional.get();
+		}
+		return null;
+	}
+
+	/**
 	 * To add a new article
 	 */
 	@Override

@@ -42,6 +42,20 @@ public class ArticleController {
 	}
 
 	/**
+	 * Get an article by ID
+	 * 
+	 * @return
+	 */
+	@GetMapping("getArticle/{articleId}")
+	public ResponseEntity<ArticleDto> getArticle(@PathVariable("articleId") int articleId) {
+		Article article = articleService.getArticle(articleId);
+		if (article == null) {
+			return new ResponseEntity<ArticleDto>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<ArticleDto>(mapper.map(article, ArticleDto.class), HttpStatus.OK);
+	}
+
+	/**
 	 * To add a new article to the database
 	 * 
 	 * @param articleDto
